@@ -1,23 +1,23 @@
-const request = require('request');
+const geocode = require('./utils/geocode');
+const forecast = require('./utils/forecast');
 
-// const url =
-//   'https://api.darksky.net/forecast/f463fd9e263b4ae05527d6c979b85108/37.8267,-122.4233?units=si';
+const address = process.argv[2];
 
-// request({ url: url, json: true }, (err, response) => {
-//   console.log(
-//     `${response.body.daily.data[0].summary} It is currently ${
-//       response.body.currently.temperature
-//     } degrees out. There is a ${
-//       response.body.currently.precipProbability
-//     }% chanse of rain.`
-//   );
-// });
+if (!address) {
+  console.log('Please provide an address');
+} else {
+  geocode(address, (error, data) => {
+    if (error) {
+      return console.log(error);
+    }
 
-const geocodeURL =
-  'https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoiYXZhZGFyYWQiLCJhIjoiY2p3aXZ3NG45MDBmaTN5cDM4YnJsaHB3aCJ9.qsk2y0ExOmhMFROzXJRDNA&limit=1';
+    forecast(data.latitude, data.longitude, (error, forecastData) => {
+      if (error) {
+        return console.log(error);
+      }
 
-request({ url: geocodeURL, json: true }, (err, response) => {
-  const latitude = response.body.features[0].center[1];
-  const longitude = response.body.features[0].center[0];
-  console.log(latitude, longitude);
-});
+      console.log(data.location);
+      console.log(forecastData);
+    });
+  });
+}
