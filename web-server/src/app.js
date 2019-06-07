@@ -44,7 +44,7 @@ app.get('/help', (req, res) => {
 app.get('/weather', (req, res) => {
   if (!req.query.address) {
     return res.send({
-      error: 'Address must be provided'
+      error: 'Address must be provided!'
     });
   }
 
@@ -72,7 +72,7 @@ app.get('/weather', (req, res) => {
 app.get('/products', (req, res) => {
   if (!req.query.search) {
     return res.send({
-      error: 'You must provide a search term'
+      error: 'You must provide a search term!'
     });
   }
 
